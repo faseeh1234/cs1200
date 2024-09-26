@@ -4,7 +4,7 @@ class BinarySearchTree:
     # key: int
     # item: int
     # size: int
-    def __init__(self, debugger = None):
+    def __init__(self, debugger=None):
         self.left = None
         self.right = None
         self.key = None
@@ -14,9 +14,9 @@ class BinarySearchTree:
 
     @property
     def size(self):
-         return self._size
+        return self._size
        
-     # a setter function
+    # a setter function
     @size.setter
     def size(self, a):
         debugger = self.debugger
@@ -29,7 +29,7 @@ class BinarySearchTree:
     Calculates the size of the tree
     returns the size at a given node
     '''
-    def calculate_sizes(self, debugger = None):
+    def calculate_sizes(self, debugger=None):
         # Debugging code
         # No need to modify
         # Provides counts
@@ -64,7 +64,6 @@ class BinarySearchTree:
             return self.right.select(ind - left_size - 1)
         return None
 
-
     '''
     Searches for a given key
     returns a pointer to the object with target key or None (Roughgarden)
@@ -79,7 +78,6 @@ class BinarySearchTree:
         elif self.left is not None:
             return self.left.search(key)
         return None
-    
 
     '''
     Inserts a key into the tree
@@ -99,9 +97,15 @@ class BinarySearchTree:
             if self.right is None:
                 self.right = BinarySearchTree(self.debugger)
             self.right.insert(key)
-        self.size = self.left.size + self.right.size + 1
-        return self
 
+        # Update the size of the current node
+        self.size = 1
+        if self.left is not None:
+            self.size += self.left.size
+        if self.right is not None:
+            self.size += self.right.size
+
+        return self
     
     ####### Part b #######
 
@@ -127,7 +131,8 @@ class BinarySearchTree:
        11 
     '''
     def rotate(self, direction, child_side):
-          if child_side == "L" and self.left is not None:
+        
+        if child_side == "L" and self.left is not None:
             target_node = self.left
         elif child_side == "R" and self.right is not None:
             target_node = self.right
@@ -156,15 +161,24 @@ class BinarySearchTree:
             elif child_side == "R":
                 self.right = replacement_node
             
-        target_node.update_sizes()
-        replacement_node.update_sizes()
+        target_node.size = 1
+        if target_node.left is not None:
+            target_node.size += target_node.left.size
+        if target_node.right is not None:
+            target_node.size += target_node.right.size
+
+        replacement_node.size = 1
+        if replacement_node.left is not None:
+            replacement_node.size += replacement_node.left.size
+        if replacement_node.right is not None:
+            replacement_node.size += replacement_node.right.size
 
         return self
 
     def print_bst(self):
         if self.left is not None:
             self.left.print_bst()
-        print( self.key),
+        print(self.key),
         if self.right is not None:
             self.right.print_bst()
         return self
